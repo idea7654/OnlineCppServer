@@ -44,7 +44,7 @@ private:
 			*Current = Next;
 			Current = reinterpret_cast<UCHAR**>(Next);
 		}
-		*Current = 0;
+		*Current = 0; //마지막일 경우 앞에 4바이트는 null
 	}
 private:
 	static UCHAR *mFreePointer;
