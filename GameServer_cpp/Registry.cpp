@@ -20,7 +20,7 @@ bool CRegistry::Open(HKEY rootKey, std::string subKey)
 		return false;
 	}
 
-	if (RegOpenKey(rootKey, subKey.c_str, &mRootKey) != ERROR_SUCCESS) {
+	if (RegOpenKey(rootKey, CharToWChar(subKey.c_str()), &mRootKey) != ERROR_SUCCESS) {
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool CRegistry::CreateKey(HKEY rootKey, std::string subKey)
 		return false;
 	}
 
-	if (RegCreateKey(rootKey, subKey.c_str, &mRootKey) != ERROR_SUCCESS)
+	if (RegCreateKey(rootKey, CharToWChar(subKey.c_str()), &mRootKey) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -68,7 +68,7 @@ bool CRegistry::DeleteKey(HKEY rootKey, std::string subKey)
 		return false;
 	}
 
-	if (RegDeleteKey(rootKey, subKey.c_str) != ERROR_SUCCESS)
+	if (RegDeleteKey(rootKey, CharToWChar(subKey.c_str())) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -76,7 +76,7 @@ bool CRegistry::DeleteKey(HKEY rootKey, std::string subKey)
 	return true;
 }
 
-bool CRegistry::SetValue(std::string valueName, std::string value)
+bool CRegistry::SetValue(std::string valueName, std::string &value)
 {
 	if (valueName.empty() || value.empty())
 	{
@@ -88,7 +88,7 @@ bool CRegistry::SetValue(std::string valueName, std::string value)
 		return false;
 	}
 
-	if (RegSetValueEx(mRootKey, valueName.c_str, 0, REG_SZ, value.c_str, std::strtoul(value.c_str(), NULL, 16)) != ERROR_SUCCESS)
+	if (RegSetValueEx(mRootKey, CharToWChar(valueName.c_str()), 0, REG_SZ, reinterpret_cast<const BYTE*>(value.c_str()), std::strtoul(value.c_str(), NULL, 16)) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -96,7 +96,7 @@ bool CRegistry::SetValue(std::string valueName, std::string value)
 	return true;
 }
 
-bool CRegistry::SetValueFromMultiSz(std::string valueName, std::string value, unsigned long byteLength)
+bool CRegistry::SetValueFromMultiSz(std::string valueName, std::string &value, unsigned long byteLength)
 {
 	if (valueName.empty() || value.empty())
 	{
@@ -107,7 +107,7 @@ bool CRegistry::SetValueFromMultiSz(std::string valueName, std::string value, un
 		return false;
 	}
 
-	if (RegSetValueEx(mRootKey, valueName.c_str, 0, REG_MULTI_SZ, value.c_str, byteLength) != ERROR_SUCCESS)
+	if (RegSetValueEx(mRootKey, CharToWChar(valueName.c_str()), 0, REG_MULTI_SZ, reinterpret_cast<const BYTE*>(value.c_str()), byteLength) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -126,7 +126,7 @@ bool CRegistry::SetValue(std::string valueName, unsigned long value)
 		return false;
 	}
 
-	if (RegSetValueEx(mRootKey, valueName.c_str, 0, REG_DWORD, (BYTE*)&value, sizeof(unsigned long)) != ERROR_SUCCESS)
+	if (RegSetValueEx(mRootKey, CharToWChar(valueName.c_str()), 0, REG_DWORD, (BYTE*)&value, sizeof(unsigned long)) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -134,7 +134,7 @@ bool CRegistry::SetValue(std::string valueName, unsigned long value)
 	return true;
 }
 
-bool CRegistry::GetValue(std::string valueName, std::string value, unsigned long* bufferLength)
+bool CRegistry::GetValue(std::string valueName, std::string &value, unsigned long* bufferLength)
 {
 	unsigned long valueType = 0;
 
@@ -148,7 +148,7 @@ bool CRegistry::GetValue(std::string valueName, std::string value, unsigned long
 		return false;
 	}
 
-	if (RegQueryValueEx(mRootKey, valueName.c_str, 0, &valueType, value.c_str, bufferLength) != ERROR_SUCCESS)
+	if (RegQueryValueEx(mRootKey, CharToWChar(valueName.c_str()), 0, &valueType, (unsigned char*)value.c_str(), bufferLength) != ERROR_SUCCESS)
 	{
 		return false;
 	}
@@ -171,7 +171,7 @@ bool CRegistry::GetValue(std::string valueName, unsigned long* value)
 		return false;
 	}
 
-	if (RegQueryValueEx(mRootKey, valueName.c_str, 0, &ValueType, (BYTE*)value, &BufferLength) != ERROR_SUCCESS)
+	if (RegQueryValueEx(mRootKey, CharToWChar(valueName.c_str()), 0, &ValueType, (BYTE*)value, &BufferLength) != ERROR_SUCCESS)
 	{
 		return false;
 	}

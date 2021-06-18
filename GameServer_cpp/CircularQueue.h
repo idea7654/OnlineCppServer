@@ -2,15 +2,15 @@
 #include <Windows.h>
 
 template<class T>
-class CCircularQueue
+class CCircularQueue2 : public CMultiThreadSync<CCircularQueue>
 {
 public:
-	CCircularQueue(void)
+	CCircularQueue2(void)
 	{
 		ZeroMemory(mQueue, sizeof(mQueue));
 		mQueueHead = mQueueTail = 0;
 	}
-	~CCircularQueue(void) {};
+	~CCircularQueue2(void) {};
 
 private:
 	int MAX_QUEUE_LENGTH = 5;
@@ -30,6 +30,8 @@ public:
 	bool End(void) { return true; }
 	bool Push(T data)
 	{
+		CThread Sync;
+
 		unsigned long TempTail = (mQueueTail + 1) % MAX_QUEUE_LENGTH;
 		if (TempTail == mQueueHead)
 		{
@@ -45,6 +47,8 @@ public:
 
 	bool Pop(T& data)
 	{
+		CThread Sync;
+
 		if (mQueueHead == mQueueTail)
 		{
 			return false;
@@ -58,6 +62,7 @@ public:
 
 	bool IsEmpty(void)
 	{
+		CThreadSync Sync;
 		if (mQueueHead == mQueueTail) return true;
 		return false;
 	}

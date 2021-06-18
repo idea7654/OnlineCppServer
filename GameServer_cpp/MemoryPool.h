@@ -1,14 +1,16 @@
 #pragma once
 #include <Windows.h>
 template <class T, int ALLOC_BLOCK_SIZE = 50>
-class CMemoryPool
+class CMemoryPool : public CMultiThreadSync<T>
 {
 public:
-	static void&* operator new(std::size_t alloclLength)
+	static void* operator new(std::size_t allocLength)
 	{
-		assert(sizeof(T) == allocLength);
-		assert(sizeof(T) == sizeof(UCHAR*));
+		CThreadSync Sync;
 
+		assert(sizeof(T) == allocLength);
+		assert(sizeof(T) >= sizeof(UCHAR*));
+		//만약 더 이상 할당할 수 있는 공간이 없을 경우 새로 할당
 		if (!mFreePointer)
 		{
 			allockBlock();
@@ -22,6 +24,7 @@ public:
 
 	static void operator delete(void* deletePointer)
 	{
+		CThread Sync;
 		*reinterpret_cast<UCHAR**>(deletePointer) = mFreePointer;
 		//delete된 블록의 next에 현재 mFreePointer의 주소를 넣어줌
 		mFreePointer = static_cast<UCHAR*>(deletePointer);
@@ -40,8 +43,8 @@ private:
 
 		for (int i = 0; i < ALLOC_BLOCK_SIZE - 1; ++i)
 		{
-			Next += sizeof(T);
-			*Current = Next;
+			Next += sizeof(T); //다음 블록 계산
+			*Current = Next; //할당된 메모리 앞 4바이트에 다음 블록의 주소를 넣음
 			Current = reinterpret_cast<UCHAR**>(Next);
 		}
 		*Current = 0; //마지막일 경우 앞에 4바이트는 null

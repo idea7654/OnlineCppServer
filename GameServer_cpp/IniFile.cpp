@@ -7,14 +7,14 @@ CIniFile::CIniFile(void)
 
 CIniFile::~CIniFile(void) {};
 
-bool CIniFile::Open(std::string fileName)
+bool CIniFile::Open(std::string &fileName)
 {
 	if (fileName.empty())
 	{
 		return false;
 	}
 
-	_tcsncpy(mFileName->c_str, fileName.c_str, MAX_PATH);
+	_tcsncpy(CharToWChar(mFileName->c_str()), CharToWChar(fileName.c_str()), MAX_PATH);
 	return true;
 }
 
@@ -30,7 +30,7 @@ bool CIniFile::GetValue(std::string keyName, std::string valueName, unsigned lon
 		return false;
 	}
 
-	*value = GetPrivateProfileInt(keyName.c_str, valueName.c_str, 0, mFileName->c_str);
+	*value = GetPrivateProfileInt(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), 0, CharToWChar(mFileName->c_str()));
 
 	return true;
 }
@@ -44,7 +44,7 @@ bool CIniFile::GetValue(std::string keyName, std::string valueName, float *value
 
 	TCHAR valueChar[16] = {0,};
 	//float형을 따로 가져오는 함수가 없기 때문에 일단 문자열 형태로 가져와서 변환을 해줌
-	GetPrivateProfileString(keyName.c_str, valueName.c_str, _T(""), valueChar, 16, mFileName->c_str);
+	GetPrivateProfileString(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), _T(""), valueChar, 16, CharToWChar(mFileName->c_str()));
 
 	*value = (float)_tstof(valueChar);
 
@@ -58,7 +58,7 @@ bool CIniFile::GetValue(std::string keyName, std::string valueName, std::string 
 		return false;
 	}
 
-	*bufferLength = GetPrivateProfileString(keyName.c_str, valueName.c_str, _T(""), value.c_str, *bufferLength, mFileName->c_str);
+	*bufferLength = GetPrivateProfileString(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), _T(""), CharToWChar(value.c_str()), *bufferLength, CharToWChar(mFileName->c_str()));
 
 	return true;
 }
@@ -73,7 +73,7 @@ bool CIniFile::SetValue(std::string keyName, std::string valueName, unsigned lon
 	TCHAR Value[16] = { 0, };
 	_itot(value, Value, 10);
 
-	WritePrivateProfileString(keyName.c_str, valueName.c_str, Value, mFileName->c_str);
+	WritePrivateProfileString(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), Value, CharToWChar(mFileName->c_str()));
 
 	return true;
 }
@@ -85,7 +85,7 @@ bool CIniFile::SetValue(std::string keyName, std::string valueName, std::string 
 		return false;
 	}
 
-	WritePrivateProfileString(keyName.c_str, valueName.c_str, value.c_str, mFileName->c_str);
+	WritePrivateProfileString(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), CharToWChar(value.c_str()), CharToWChar(mFileName->c_str()));
 
 	return true;
 }
@@ -100,7 +100,7 @@ bool CIniFile::SetValue(std::string keyName, std::string valueName, float value)
 	TCHAR Value[16]{ 0, };
 	_stprintf(Value, _T("%f"), value);
 
-	WritePrivateProfileString(keyName.c_str, valueName.c_str, Value, mFileName->c_str);
+	WritePrivateProfileString(CharToWChar(keyName.c_str()), CharToWChar(valueName.c_str()), Value, CharToWChar(mFileName->c_str()));
 
 	return true;
 }

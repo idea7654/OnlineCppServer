@@ -94,7 +94,7 @@ bool CStream::WriteByte(std::string *data)
 
 bool CStream::WriteBytes(std::string *data, unsigned long length)
 {
-	CopyMemory(mBufferPointer + mLength, data, length));
+	CopyMemory(mBufferPointer + mLength, data, length);
 	mLength += length;
 	return true;
 }
