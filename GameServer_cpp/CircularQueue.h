@@ -1,16 +1,16 @@
 #pragma once
-#include <Windows.h>
+//#include <Windows.h>
 
 template<class T>
-class CCircularQueue2 : public CMultiThreadSync<CCircularQueue>
+class CCircularQueue : public CMultiThreadSync<CCircularQueue>
 {
 public:
-	CCircularQueue2(void)
+	CCircularQueue(void)
 	{
 		ZeroMemory(mQueue, sizeof(mQueue));
 		mQueueHead = mQueueTail = 0;
 	}
-	~CCircularQueue2(void) {};
+	~CCircularQueue(void) {};
 
 private:
 	int MAX_QUEUE_LENGTH = 5;

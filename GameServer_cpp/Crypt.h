@@ -1,5 +1,6 @@
 #pragma once
-#include <string>
+//#include <string>
+#include "Global.h"
 class CCrypt
 {
 public:

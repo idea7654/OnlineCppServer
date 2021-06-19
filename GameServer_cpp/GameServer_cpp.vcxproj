@@ -154,6 +154,8 @@
     <ClCompile Include="Crypt.cpp" />
     <ClCompile Include="GameServer_cpp.cpp" />
     <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="NetworkSession.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Registry.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Stream.cpp" />
@@ -162,10 +164,13 @@
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="convert.h" />
     <ClInclude Include="Crypt.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="IniFile.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MemoryLeak.h" />
     <ClInclude Include="MemoryPool.h" />
+    <ClInclude Include="NetworkSession.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Registry.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Stream.h" />

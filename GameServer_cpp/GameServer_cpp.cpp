@@ -5,7 +5,7 @@ int main()
 {
    // std::cout << "Hello World!\n";
 	byte *pData = new byte[1024];
-	ZeroMemory(pData, 1024 * sizeof(byte));
+	ZeroMemory(pData, sizeof(byte));
 
 	return 0;
 }
