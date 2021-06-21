@@ -2,7 +2,6 @@
 #include "ThreadSync.h"
 #include "Global.h"
 #include "CircularQueue.h"
-
 class CNetworkSession : public CMultiThreadSync<CNetworkSession>
 {
 public:
@@ -25,7 +24,7 @@ private:
 	HANDLE			mReliableUdpThreadWakeUpEvent;
 	HANDLE			mReliableUdpWriteCompleteEvent;
 
-	CCircularQueue<int>	mReliableWriteQueue;
+	CCircularQueue	mReliableWriteQueue;
 
 	bool			mIsReliableUdpSending;
 
